@@ -1,13 +1,21 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package database;
 
-/**
- *
- * @author k.yves
- */
+package database;
+import java.sql.*;
 public class DatabaseConnection {
-    
+    private static final String URL="";
+    private  static final  String User="";
+    private static final String Password="";
+    public static Connection getConnection(){
+        
+    try{
+        Connection conn=DriverManager.getConnection(URL,User,Password);
+        System.out.print("connected successfully!");
+        return conn;
+        }
+    catch(SQLException e){
+        System.out.println("Connection failled");
+         e.printStackTrace();
+         return null;
+    }
+}
 }

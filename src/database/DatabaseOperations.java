@@ -5,5 +5,4 @@ public interface DatabaseOperations {
     void delete();
     void update();
     void search(String keyword);
-    
 }
