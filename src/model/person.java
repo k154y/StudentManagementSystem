@@ -2,10 +2,10 @@ package model;
 
 public abstract class person {
     protected String name;
-    protected String Email;
-    public person(String name,String Email){
+    protected String email;
+    public person(String name,String email){
         this.name=name;
-        this.Email=Email;
+        this.email=email;
     }
     
     public abstract void display();
