@@ -1,9 +1,15 @@
 
 package GUI;
+import java.sql.*;
+import javax.swing.JOptionPane;
+import database.DatabaseConnection;
+import model.User;
 
 public class LoginPage extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(LoginPage.class.getName());
+    
+  
 
     public LoginPage() {
         initComponents();
@@ -142,6 +148,50 @@ public class LoginPage extends javax.swing.JFrame {
 
     private void LoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginActionPerformed
         // TODO add your handling code here:
+        try {
+        String userEmail = email.getText().trim();
+        String userPass = new String(password.getPassword()).trim();
+
+        if (userEmail.isEmpty() || userPass.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter email and password!");
+            return;
+        }
+
+        String sql = "SELECT * FROM users WHERE email = ? AND password = ?";
+        PreparedStatement pst = DatabaseConnection.getConnection().prepareStatement(sql);
+
+        pst.setString(1, userEmail);
+        pst.setString(2, userPass);
+
+        ResultSet rs = pst.executeQuery();
+
+        if (rs.next()) {
+
+            // Get user data
+            int id = rs.getInt("id");
+            String username = rs.getString("username");
+            String emailDB = rs.getString("email");
+            String passwordDB = rs.getString("password");
+
+            // Create User object
+            User loggedUser = new User(id, username, emailDB, passwordDB);
+
+            JOptionPane.showMessageDialog(this, "Login Successful!");
+
+            // Open MainPage and pass logged user
+            MainPage main = new MainPage(loggedUser);
+            main.setVisible(true);
+
+            this.dispose(); // close login page
+
+        } else {
+            JOptionPane.showMessageDialog(this, "Invalid Email or Password!");
+        }
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+        e.printStackTrace();
+    }
     }//GEN-LAST:event_LoginActionPerformed
 
     private void RegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegisterActionPerformed

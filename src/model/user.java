@@ -8,13 +8,13 @@ package model;
  *
  * @author k.yves
  */
-public class user 
+public class User 
 {
     private int id;
     private String password;
     private String username;
     private String  email;
-    public user(int id,String password,String username,String email){
+    public User(int id,String password,String username,String email){
         this.id=id;
         this.password=password;
         this.username=username;

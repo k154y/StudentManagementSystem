@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package GUI;
-
+import model.User;
 /**
  *
  * @author User
@@ -15,9 +15,11 @@ public class MainPage extends javax.swing.JFrame {
     /**
      * Creates new form MainPage
      */
-    public MainPage() {
-        initComponents();
-    }
+    private User loggedUser;
+   public MainPage(User user) {
+    initComponents();
+    this.loggedUser = user;
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -341,7 +343,7 @@ public class MainPage extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new MainPage().setVisible(true));
+      
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

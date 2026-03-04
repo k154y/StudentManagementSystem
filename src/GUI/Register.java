@@ -1,5 +1,8 @@
 
 package GUI;
+import java.sql.*;
+import database.DatabaseConnection;
+import javax.swing.JOptionPane;
 
 public class Register extends javax.swing.JFrame {
     
@@ -8,11 +11,55 @@ public class Register extends javax.swing.JFrame {
    private void loginActionPerformed(java.awt.event.ActionEvent evt) {
     LoginPage loginPage = new LoginPage(); // create LoginPage JFrame
     loginPage.setVisible(true);             // show LoginPage
-    this.dispose();                         // close Register page
+    this.dispose(); 
+    // close Register page
+}
+   private void createActionPerformed(java.awt.event.ActionEvent evt) {
+
+    try {
+        String user = username.getText().trim();
+        String mail = email.getText().trim();
+        String pass = password.getText().trim();
+        String confirm = conf_password.getText().trim();
+
+        // Validation
+        if (user.isEmpty() || mail.isEmpty() || pass.isEmpty() || confirm.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "All fields are required!");
+            return;
+        }
+
+        if (!pass.equals(confirm)) {
+            JOptionPane.showMessageDialog(this, "Passwords do not match!");
+            return;
+        }
+
+        // Insert into database
+        String sql = "INSERT INTO users(username, email, password) VALUES (?, ?, ?)";
+
+        PreparedStatement pst = DatabaseConnection.getConnection().prepareStatement(sql);
+        pst.setString(1, user);
+        pst.setString(2, mail);
+        pst.setString(3, pass);
+
+        pst.executeUpdate();
+
+        JOptionPane.showMessageDialog(this, "Account Created Successfully!");
+
+        // Clear fields
+        username.setText("");
+        email.setText("");
+        password.setText("");
+        conf_password.setText("");
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+        e.printStackTrace();
+    }
 }
     public Register() {
         initComponents();
         login.addActionListener(this::loginActionPerformed);
+        create.addActionListener(this::createActionPerformed);
     }
 
     @SuppressWarnings("unchecked")
