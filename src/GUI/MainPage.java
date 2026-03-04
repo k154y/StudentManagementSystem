@@ -8,14 +8,14 @@ package GUI;
  *
  * @author User
  */
-public class main extends javax.swing.JFrame {
+public class MainPage extends javax.swing.JFrame {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(main.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MainPage.class.getName());
 
     /**
-     * Creates new form main
+     * Creates new form MainPage
      */
-    public main() {
+    public MainPage() {
         initComponents();
     }
 
@@ -66,7 +66,7 @@ public class main extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new main().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new MainPage().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
