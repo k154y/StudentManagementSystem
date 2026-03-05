@@ -17,7 +17,13 @@ public class AboutPage extends javax.swing.JFrame {
      */
     public AboutPage() {
         initComponents();
+        ok.addActionListener(this::okActionPerformed);
+        
     }
+    private void okActionPerformed(java.awt.event.ActionEvent evt) {
+  // open MainPage
+    this.dispose(); }                 // close AboutPage
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -38,7 +44,7 @@ public class AboutPage extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jList2 = new javax.swing.JList<>();
-        jButton1 = new javax.swing.JButton();
+        ok = new javax.swing.JButton();
 
         jDialog1.setName("About"); // NOI18N
 
@@ -83,8 +89,8 @@ public class AboutPage extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(jList2);
 
-        jButton1.setForeground(new java.awt.Color(34, 139, 34));
-        jButton1.setText("OK");
+        ok.setForeground(new java.awt.Color(34, 139, 34));
+        ok.setText("OK");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -111,7 +117,7 @@ public class AboutPage extends javax.swing.JFrame {
                         .addComponent(jLabel2))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(293, 293, 293)
-                        .addComponent(jButton1)))
+                        .addComponent(ok)))
                 .addContainerGap(274, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -132,7 +138,7 @@ public class AboutPage extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
+                .addComponent(ok)
                 .addContainerGap(10, Short.MAX_VALUE))
         );
 
@@ -165,7 +171,6 @@ public class AboutPage extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -176,5 +181,6 @@ public class AboutPage extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JButton ok;
     // End of variables declaration//GEN-END:variables
 }

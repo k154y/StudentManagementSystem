@@ -46,10 +46,11 @@ public class Register extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, "Account Created Successfully!");
 
         // Clear fields
-        username.setText("");
-        email.setText("");
-        password.setText("");
-        conf_password.setText("");
+        username.setText("Username");
+        email.setText("Email");
+        password.setText("Pasword");
+        conf_password.setText("Confirm Password");
+        
 
     } catch (Exception e) {
         JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
