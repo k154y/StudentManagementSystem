@@ -167,13 +167,21 @@ public MainPage() {
         serach = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+<<<<<<< HEAD
         exit = new javax.swing.JMenuItem();
         studentmenu = new javax.swing.JMenu();
+=======
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+>>>>>>> origin/GUI
         jMenu3 = new javax.swing.JMenu();
         about = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("STUDENT MANAGEMENT SYSTEM");
+        setAutoRequestFocus(false);
+        setBackground(new java.awt.Color(239, 246, 255));
 
         jLabel1.setForeground(new java.awt.Color(0, 102, 255));
         jLabel1.setText("STUDENT INFORMATION");
@@ -282,6 +290,9 @@ public MainPage() {
         exit.setText("Exit");
         jMenu1.add(exit);
 
+        jMenuItem3.setText("Logout");
+        jMenu1.add(jMenuItem3);
+
         jMenuBar1.add(jMenu1);
 
         studentmenu.setText("Students");
@@ -306,7 +317,7 @@ public MainPage() {
                         .addGap(145, 145, 145)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(131, 131, 131)
+                        .addGap(56, 56, 56)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(792, 792, 792)
@@ -499,6 +510,12 @@ public MainPage() {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
+<<<<<<< HEAD
+=======
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+>>>>>>> origin/GUI
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JRadioButton jRadioButton1;
