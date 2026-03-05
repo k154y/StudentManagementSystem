@@ -127,6 +127,8 @@ public class MainPage extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("STUDENT MANAGEMENT SYSTEM");
+        setAutoRequestFocus(false);
+        setBackground(new java.awt.Color(239, 106, 255));
 
         jLabel1.setForeground(new java.awt.Color(0, 102, 255));
         jLabel1.setText("STUDENT INFORMATION");
@@ -259,7 +261,7 @@ public class MainPage extends javax.swing.JFrame {
                         .addGap(145, 145, 145)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(131, 131, 131)
+                        .addGap(56, 56, 56)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(792, 792, 792)
