@@ -4,19 +4,33 @@ import java.sql.*;
 import javax.swing.JOptionPane;
 import database.DatabaseConnection;
 import model.User;
+import java.util.prefs.Preferences;
+
 
 public class LoginPage extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(LoginPage.class.getName());
+     private Preferences prefs = Preferences.userRoot().node(this.getClass().getName());
     
   
 
     public LoginPage() {
         initComponents();
         Register.addActionListener(this::RegisterActionPerformed);
+        int savedUserId = prefs.getInt("user_id", -1);
+        if(savedUserId != -1){
+    // User info exists, auto-login
+        String username = prefs.get("user_name", "");
+        String emailSaved = prefs.get("user_email", "");
+        String passwordSaved = ""; // optionally leave blank, or store hashed password if secure
+        User savedUser = new User(savedUserId, username, emailSaved, passwordSaved);
+
+        MainPage main = new MainPage(savedUser);
+        main.setVisible(true);
+        this.dispose(); // close login page
     }
 
-
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -29,9 +43,9 @@ public class LoginPage extends javax.swing.JFrame {
         Login = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         password = new javax.swing.JPasswordField();
-        remember = new javax.swing.JCheckBox();
-        jLabel4 = new javax.swing.JLabel();
-        jProgressBar1 = new javax.swing.JProgressBar();
+        remember_me = new javax.swing.JCheckBox();
+        successfull = new javax.swing.JLabel();
+        progressbar = new javax.swing.JProgressBar();
         Reset = new javax.swing.JButton();
         Register = new javax.swing.JButton();
 
@@ -58,10 +72,9 @@ public class LoginPage extends javax.swing.JFrame {
 
         password.setText("Password");
 
-        remember.setText("Remember Me");
+        remember_me.setText("Remember Me");
 
-        jLabel4.setBackground(new java.awt.Color(255, 51, 0));
-        jLabel4.setText("Login successful!");
+        successfull.setBackground(new java.awt.Color(255, 51, 0));
 
         Reset.setText("Reset");
 
@@ -86,16 +99,16 @@ public class LoginPage extends javax.swing.JFrame {
                         .addComponent(Register)
                         .addGap(0, 0, Short.MAX_VALUE))))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(75, 75, 75)
+                .addGap(81, 81, 81)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(successfull, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(email, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(Login, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(Reset, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(remember)
-                    .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(78, Short.MAX_VALUE))
+                    .addComponent(remember_me)
+                    .addComponent(progressbar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(72, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -111,11 +124,11 @@ public class LoginPage extends javax.swing.JFrame {
                 .addGap(23, 23, 23)
                 .addComponent(Reset)
                 .addGap(18, 18, 18)
-                .addComponent(remember)
+                .addComponent(remember_me)
                 .addGap(31, 31, 31)
-                .addComponent(jLabel4)
+                .addComponent(successfull)
                 .addGap(18, 18, 18)
-                .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(progressbar, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
@@ -147,8 +160,7 @@ public class LoginPage extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void LoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginActionPerformed
-        // TODO add your handling code here:
-        try {
+     try {
         String userEmail = email.getText().trim();
         String userPass = new String(password.getPassword()).trim();
 
@@ -176,13 +188,43 @@ public class LoginPage extends javax.swing.JFrame {
             // Create User object
             User loggedUser = new User(id, username, emailDB, passwordDB);
 
-            JOptionPane.showMessageDialog(this, "Login Successful!");
+            // Handle Remember Me using Preferences
+            java.util.prefs.Preferences prefs = java.util.prefs.Preferences.userRoot().node(this.getClass().getName());
+            if (remember_me.isSelected()) {
+                prefs.putInt("user_id", id);
+                prefs.put("user_email", emailDB);
+                prefs.put("user_name", username);
+            } else {
+                prefs.remove("user_id");
+                prefs.remove("user_email");
+                prefs.remove("user_name");
+            }
 
-            // Open MainPage and pass logged user
-            MainPage main = new MainPage(loggedUser);
-            main.setVisible(true);
+            // Show success message
+            successfull.setText("Login Successful! Loading...");
+            progressbar.setValue(0);
+            progressbar.setVisible(true);
 
-            this.dispose(); // close login page
+            // Progress bar animation
+            new Thread(() -> {
+                for (int i = 0; i <= 100; i += 10) {
+                    try {
+                        Thread.sleep(50); // adjust speed of progress
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+                    final int value = i;
+                    progressbar.setValue(value);
+                }
+
+                // Open MainPage after loading
+                java.awt.EventQueue.invokeLater(() -> {
+                    MainPage main = new MainPage(loggedUser);
+                    main.setVisible(true);
+                    this.dispose(); // close login page
+                });
+
+            }).start();
 
         } else {
             JOptionPane.showMessageDialog(this, "Invalid Email or Password!");
@@ -215,11 +257,11 @@ public class LoginPage extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JPasswordField password;
-    private javax.swing.JCheckBox remember;
+    private javax.swing.JProgressBar progressbar;
+    private javax.swing.JCheckBox remember_me;
+    private javax.swing.JLabel successfull;
     // End of variables declaration//GEN-END:variables
 }

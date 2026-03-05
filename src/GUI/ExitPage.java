@@ -17,6 +17,8 @@ public class ExitPage extends javax.swing.JFrame {
      */
     public ExitPage() {
         initComponents();
+        yes.addActionListener(this::yesActionPerformed);
+        no.addActionListener(this::noActionPerformed);
     }
 
     /**
@@ -33,8 +35,8 @@ public class ExitPage extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        yes = new javax.swing.JButton();
+        no = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
 
         jDialog1.setName("Exit Page"); // NOI18N
@@ -60,15 +62,15 @@ public class ExitPage extends javax.swing.JFrame {
 
         jLabel4.setText("Any unsaved data will be lost.                                   ");
 
-        jButton1.setBackground(new java.awt.Color(76, 175, 80));
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("YES");
-        jButton1.addActionListener(this::jButton1ActionPerformed);
+        yes.setBackground(new java.awt.Color(76, 175, 80));
+        yes.setForeground(new java.awt.Color(255, 255, 255));
+        yes.setText("YES");
+        yes.addActionListener(this::yesActionPerformed);
 
-        jButton2.setBackground(new java.awt.Color(244, 67, 54));
-        jButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jButton2.setText("NO");
-        jButton2.addActionListener(this::jButton2ActionPerformed);
+        no.setBackground(new java.awt.Color(244, 67, 54));
+        no.setForeground(new java.awt.Color(255, 255, 255));
+        no.setText("NO");
+        no.addActionListener(this::noActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -76,9 +78,9 @@ public class ExitPage extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addComponent(yes)
                 .addGap(48, 48, 48)
-                .addComponent(jButton2)
+                .addComponent(no)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGap(119, 119, 119)
@@ -108,21 +110,24 @@ public class ExitPage extends javax.swing.JFrame {
                 .addComponent(jLabel4)
                 .addGap(29, 29, 29)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(yes)
+                    .addComponent(no))
                 .addGap(52, 52, 52))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    private void noActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_noActionPerformed
+        MainPage mainPage=new MainPage();
+          // open MainPage
+        this.dispose();
+    }//GEN-LAST:event_noActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void yesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_yesActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+           System.exit(0);  // closes the whole application
+    }//GEN-LAST:event_yesActionPerformed
 
     /**
      * @param args the command line arguments
@@ -150,13 +155,13 @@ public class ExitPage extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JButton no;
+    private javax.swing.JButton yes;
     // End of variables declaration//GEN-END:variables
 }

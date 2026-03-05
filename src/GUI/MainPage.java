@@ -6,14 +6,29 @@ package GUI;
 import model.User;
 import model.Student;
 import java.sql.ResultSet;
+
 public class MainPage extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MainPage.class.getName());
-
+   
+ 
     /**
      * Creates new form MainPage
      */
     private User loggedUser;
+public MainPage() {
+    initComponents();
+}
+    private void exitActionPerformed(java.awt.event.ActionEvent evt){
+        ExitPage exitPage=new ExitPage();
+        exitPage.setVisible(true);
+     
+    }
+    private void aboutActionPerformed(java.awt.event.ActionEvent evt){
+        AboutPage aboutPage= new AboutPage();
+        aboutPage.setVisible(true);
+           
+    }
     
     private void deleteStudent(){
 
@@ -71,12 +86,44 @@ public class MainPage extends javax.swing.JFrame {
     loadStudents(); // refresh table
 }
     
+    private void searchStudent() {
+    String kw = keyword.getText().trim();
+
+    if (kw.isEmpty()) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Please enter a keyword to search!");
+        return;
+    }
+
+    try {
+        ResultSet rs = Student.searchResult(kw); // <-- we need a method returning ResultSet
+
+        javax.swing.table.DefaultTableModel model =
+                (javax.swing.table.DefaultTableModel) jTable1.getModel();
+
+        model.setRowCount(0); // clear existing table rows
+
+        while (rs.next()) {
+            model.addRow(new Object[]{
+                rs.getInt("id"),
+                rs.getString("name"),
+                rs.getString("course"),
+                rs.getDouble("marks")
+            });
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
    public MainPage(User user) {
     initComponents();
     this.loggedUser = user;
+    exit.addActionListener(this::exitActionPerformed);
+    about.addActionListener(this::aboutActionPerformed);
     add.addActionListener(e -> addStudent());
     show.addActionListener(e -> loadStudents());
     delete.addActionListener(e -> deleteStudent());
+    serach.addActionListener(e -> searchStudent());
 }
 
     /**
@@ -120,11 +167,14 @@ public class MainPage extends javax.swing.JFrame {
         serach = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenuItem2 = new javax.swing.JMenuItem();
+
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
+        exit = new javax.swing.JMenuItem();
+        studentmenu = new javax.swing.JMenu();
+
         jMenu3 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        about = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("STUDENT MANAGEMENT SYSTEM");
@@ -235,21 +285,21 @@ public class MainPage extends javax.swing.JFrame {
 
         jMenu1.setText("File");
 
-        jMenuItem2.setText("Exit");
-        jMenu1.add(jMenuItem2);
+        exit.setText("Exit");
+        jMenu1.add(exit);
 
         jMenuItem3.setText("Logout");
         jMenu1.add(jMenuItem3);
 
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Students");
-        jMenuBar1.add(jMenu2);
+        studentmenu.setText("Students");
+        jMenuBar1.add(studentmenu);
 
         jMenu3.setText("Help");
 
-        jMenuItem1.setText("About");
-        jMenu3.add(jMenuItem1);
+        about.setText("About");
+        jMenu3.add(about);
 
         jMenuBar1.add(jMenu3);
 
@@ -436,10 +486,12 @@ public class MainPage extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem about;
     private javax.swing.JButton add;
     private javax.swing.JComboBox<String> course;
     private javax.swing.JButton delete;
     private javax.swing.JTextField email;
+    private javax.swing.JMenuItem exit;
     private javax.swing.JButton jButton1;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox2;
@@ -454,12 +506,12 @@ public class MainPage extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
+
+  
     private javax.swing.JMenuItem jMenuItem3;
+
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JRadioButton jRadioButton1;
@@ -472,6 +524,7 @@ public class MainPage extends javax.swing.JFrame {
     private javax.swing.JTextField name;
     private javax.swing.JButton serach;
     private javax.swing.JButton show;
+    private javax.swing.JMenu studentmenu;
     private javax.swing.JButton update;
     // End of variables declaration//GEN-END:variables
 }
