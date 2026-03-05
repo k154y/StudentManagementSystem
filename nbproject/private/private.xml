@@ -3,11 +3,31 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            <file>file:/C:/Users/User/Desktop/java/StudentManagementSystem/src/studentmanagementsystem/StudentManagementSystem.java</file>
+=======
+=======
+>>>>>>> origin/GUI
+            <file>file:/C:/Users/User/Desktop/StudentManagementSystem/src/GUI/main.java</file>
+=======
+>>>>>>> origin/GUI
             <file>file:/C:/Users/User/Desktop/StudentManagementSystem/src/studentmanagementsystem/StudentManagementSystem.java</file>
             <file>file:/C:/Users/User/Desktop/StudentManagementSystem/src/GUI/LoginPage.java</file>
             <file>file:/C:/Users/User/Desktop/StudentManagementSystem/src/GUI/Register.java</file>
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> origin/GUI
+=======
+=======
+            <file>file:/C:/Users/User/Desktop/java/StudentManagementSystem/src/studentmanagementsystem/StudentManagementSystem.java</file>
+>>>>>>> origin/backend
+>>>>>>> origin/GUI
+=======
             <file>file:/C:/Users/User/Desktop/StudentManagementSystem/src/GUI/MainPage.java</file>
             <file>file:/C:/Users/User/Desktop/StudentManagementSystem/src/GUI/File.java</file>
+>>>>>>> origin/GUI
         </group>
     </open-files>
 </project-private>
