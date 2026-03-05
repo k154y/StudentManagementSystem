@@ -6,10 +6,12 @@ package GUI;
 import model.User;
 import model.Student;
 import java.sql.ResultSet;
+
 public class MainPage extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MainPage.class.getName());
-
+   
+ 
     /**
      * Creates new form MainPage
      */
@@ -84,6 +86,35 @@ public MainPage() {
     loadStudents(); // refresh table
 }
     
+    private void searchStudent() {
+    String kw = keyword.getText().trim();
+
+    if (kw.isEmpty()) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Please enter a keyword to search!");
+        return;
+    }
+
+    try {
+        ResultSet rs = Student.searchResult(kw); // <-- we need a method returning ResultSet
+
+        javax.swing.table.DefaultTableModel model =
+                (javax.swing.table.DefaultTableModel) jTable1.getModel();
+
+        model.setRowCount(0); // clear existing table rows
+
+        while (rs.next()) {
+            model.addRow(new Object[]{
+                rs.getInt("id"),
+                rs.getString("name"),
+                rs.getString("course"),
+                rs.getDouble("marks")
+            });
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
    public MainPage(User user) {
     initComponents();
     this.loggedUser = user;
@@ -92,6 +123,7 @@ public MainPage() {
     add.addActionListener(e -> addStudent());
     show.addActionListener(e -> loadStudents());
     delete.addActionListener(e -> deleteStudent());
+    serach.addActionListener(e -> searchStudent());
 }
 
     /**

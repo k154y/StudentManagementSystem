@@ -79,17 +79,17 @@
                   </Group>
               </Group>
               <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="75" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="81" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jLabel4" min="-2" pref="235" max="-2" attributes="0"/>
+                      <Component id="successfull" min="-2" pref="235" max="-2" attributes="0"/>
                       <Component id="password" min="-2" pref="235" max="-2" attributes="0"/>
                       <Component id="email" min="-2" pref="235" max="-2" attributes="0"/>
                       <Component id="Login" alignment="0" min="-2" pref="235" max="-2" attributes="0"/>
                       <Component id="Reset" alignment="0" min="-2" pref="235" max="-2" attributes="0"/>
-                      <Component id="remember" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="jProgressBar1" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="remember_me" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="progressbar" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="78" max="32767" attributes="0"/>
+                  <EmptySpace pref="72" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -107,11 +107,11 @@
                   <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
                   <Component id="Reset" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="remember" min="-2" max="-2" attributes="0"/>
+                  <Component id="remember_me" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
-                  <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
+                  <Component id="successfull" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="jProgressBar1" min="-2" pref="20" max="-2" attributes="0"/>
+                  <Component id="progressbar" min="-2" pref="20" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
@@ -170,20 +170,19 @@
             <Property name="text" type="java.lang.String" value="Password"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JCheckBox" name="remember">
+        <Component class="javax.swing.JCheckBox" name="remember_me">
           <Properties>
             <Property name="text" type="java.lang.String" value="Remember Me"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel4">
+        <Component class="javax.swing.JLabel" name="successfull">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="0" green="33" red="ff" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Login successful!"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JProgressBar" name="jProgressBar1">
+        <Component class="javax.swing.JProgressBar" name="progressbar">
         </Component>
         <Component class="javax.swing.JButton" name="Reset">
           <Properties>

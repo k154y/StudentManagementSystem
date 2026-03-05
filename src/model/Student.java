@@ -120,4 +120,17 @@ public class Student extends Person implements DatabaseOperations  {
         e.printStackTrace();
     }
     }
+    public static ResultSet searchResult(String keyword) throws SQLException {
+    String sql = "SELECT * FROM students WHERE name LIKE ? OR email LIKE ? OR course LIKE ?";
+
+    Connection conn = DatabaseConnection.getConnection();
+    PreparedStatement ps = conn.prepareStatement(sql);
+
+    String searchValue = "%" + keyword + "%";
+    ps.setString(1, searchValue);
+    ps.setString(2, searchValue);
+    ps.setString(3, searchValue);
+
+    return ps.executeQuery(); // return ResultSet to caller
+}
 }
