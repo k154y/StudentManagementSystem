@@ -6,6 +6,7 @@ package GUI;
 import model.User;
 import model.Student;
 import java.sql.ResultSet;
+import javax.swing.JMenu;
 
 public class MainPage extends javax.swing.JFrame {
     
@@ -16,6 +17,7 @@ public class MainPage extends javax.swing.JFrame {
      * Creates new form MainPage
      */
     private User loggedUser;
+    private JMenu jMenu2;
 public MainPage() {
     initComponents();
 }
