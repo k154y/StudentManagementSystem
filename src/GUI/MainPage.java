@@ -60,8 +60,10 @@ public class MainPage extends javax.swing.JFrame {
         jButton6 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenu3 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("STUDENT MANAGEMENT SYSTEM");
@@ -190,12 +192,20 @@ public class MainPage extends javax.swing.JFrame {
         jButton6.setText("Show All");
 
         jMenu1.setText("File");
+
+        jMenuItem2.setText("Exit");
+        jMenu1.add(jMenuItem2);
+
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Students");
         jMenuBar1.add(jMenu2);
 
         jMenu3.setText("Help");
+
+        jMenuItem1.setText("About");
+        jMenu3.add(jMenuItem1);
+
         jMenuBar1.add(jMenu3);
 
         setJMenuBar(jMenuBar1);
@@ -368,6 +378,8 @@ public class MainPage extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
