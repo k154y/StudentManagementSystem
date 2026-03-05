@@ -18,27 +18,43 @@ public class Student extends Person implements DatabaseOperations  {
         this.marks=marks;
         
     }
+    public static ResultSet getAll(int userId){
+    try{
+        Connection conn = DatabaseConnection.getConnection();
+        String sql = "SELECT * FROM students WHERE user_id=?";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setInt(1, userId);
+        return ps.executeQuery();
+    }catch(SQLException e){
+        e.printStackTrace();
+    }
+    return null;
+}
     @Override
     public void display(){
         System.out.printf("ID:%d %nName:%s %nCourse:%s %nMarks:%.2f %n",
                   id, name, course, marks);
     }
     @Override
-    public void add(){
-        try{
-            Connection conn=DatabaseConnection.getConnection();
-            String sql="INSERT INTO students(name,email,course,marks) VALUES(?,?,?,?)";
-            PreparedStatement ps=conn.prepareStatement(sql);
-            ps.setString(1,name);
-            ps.setString(2,email);
-            ps.setString(3,course);
-            ps.setDouble(4,marks);
-            ps.executeUpdate();
-            conn.close();
-        }
-        catch(SQLException e){
-            e.printStackTrace();
-    }}
+    public void add(int userId){
+    try{
+        Connection conn = DatabaseConnection.getConnection();
+        String sql = "INSERT INTO students(name,email,course,marks,user_id) VALUES(?,?,?,?,?)";
+        PreparedStatement ps = conn.prepareStatement(sql);
+
+        ps.setString(1, name);
+        ps.setString(2, email);
+        ps.setString(3, course);
+        ps.setDouble(4, marks);
+        ps.setInt(5, userId);
+
+        ps.executeUpdate();
+        conn.close();
+
+    } catch(SQLException e){
+        e.printStackTrace();
+    }
+}
     @Override
     public void delete(){
         try{

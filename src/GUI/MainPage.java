@@ -4,10 +4,8 @@
  */
 package GUI;
 import model.User;
-/**
- *
- * @author User
- */
+import model.Student;
+import java.sql.ResultSet;
 public class MainPage extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MainPage.class.getName());
@@ -16,9 +14,69 @@ public class MainPage extends javax.swing.JFrame {
      * Creates new form MainPage
      */
     private User loggedUser;
+    
+    private void deleteStudent(){
+
+    int selectedRow = jTable1.getSelectedRow();
+
+    if(selectedRow == -1){
+        javax.swing.JOptionPane.showMessageDialog(this, "Select a row first!");
+        return;
+    }
+
+    int id = (int) jTable1.getValueAt(selectedRow, 0);
+
+    Student student = new Student(id, "", "", "", 0);
+    student.delete();
+
+    loadStudents(); // refresh table
+}
+    
+    private void loadStudents(){
+
+    try{
+        ResultSet rs = Student.getAll(loggedUser.getId());
+
+        javax.swing.table.DefaultTableModel model =
+                (javax.swing.table.DefaultTableModel) jTable1.getModel();
+
+        model.setRowCount(0); // clear table
+
+        while(rs.next()){
+            model.addRow(new Object[]{
+                rs.getInt("id"),
+                rs.getString("name"),
+                rs.getString("course"),
+                rs.getDouble("marks"),
+                " "
+            });
+        }
+
+    }catch(Exception e){
+        e.printStackTrace();
+    }
+}
+    
+    private void addStudent(){
+
+    String studentName = name.getText();
+    String studentEmail = email.getText();
+    String studentCourse = course.getSelectedItem().toString();
+    double studentMarks = Double.parseDouble(marks.getText());
+
+    Student student = new Student(0, studentCourse, studentName, studentEmail, studentMarks);
+
+    student.add(loggedUser.getId());
+
+    loadStudents(); // refresh table
+}
+    
    public MainPage(User user) {
     initComponents();
     this.loggedUser = user;
+    add.addActionListener(e -> addStudent());
+    show.addActionListener(e -> loadStudents());
+    delete.addActionListener(e -> deleteStudent());
 }
 
     /**
@@ -33,13 +91,13 @@ public class MainPage extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        name = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        email = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        course = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        marks = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -55,11 +113,11 @@ public class MainPage extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        add = new javax.swing.JButton();
+        update = new javax.swing.JButton();
+        delete = new javax.swing.JButton();
+        serach = new javax.swing.JButton();
+        show = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
@@ -93,7 +151,7 @@ public class MainPage extends javax.swing.JFrame {
 
         jLabel4.setText("Courses:");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Computer Science", "Mathematics", "OOP in Java" }));
+        course.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Computer Science", "Mathematics", "OOP in Java" }));
 
         jLabel5.setText("Marks:");
 
@@ -171,25 +229,25 @@ public class MainPage extends javax.swing.JFrame {
             .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 19, Short.MAX_VALUE)
         );
 
-        jButton2.setBackground(new java.awt.Color(76, 175, 80));
-        jButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jButton2.setText("Add");
+        add.setBackground(new java.awt.Color(76, 175, 80));
+        add.setForeground(new java.awt.Color(255, 255, 255));
+        add.setText("Add");
 
-        jButton3.setBackground(new java.awt.Color(33, 150, 243));
-        jButton3.setForeground(new java.awt.Color(255, 255, 255));
-        jButton3.setText("Update");
+        update.setBackground(new java.awt.Color(33, 150, 243));
+        update.setForeground(new java.awt.Color(255, 255, 255));
+        update.setText("Update");
 
-        jButton4.setBackground(new java.awt.Color(244, 67, 54));
-        jButton4.setForeground(new java.awt.Color(255, 255, 255));
-        jButton4.setText("Delete");
+        delete.setBackground(new java.awt.Color(244, 67, 54));
+        delete.setForeground(new java.awt.Color(255, 255, 255));
+        delete.setText("Delete");
 
-        jButton5.setBackground(new java.awt.Color(156, 39, 176));
-        jButton5.setForeground(new java.awt.Color(255, 255, 255));
-        jButton5.setText("Search");
+        serach.setBackground(new java.awt.Color(156, 39, 176));
+        serach.setForeground(new java.awt.Color(255, 255, 255));
+        serach.setText("Search");
 
-        jButton6.setBackground(new java.awt.Color(255, 152, 0));
-        jButton6.setForeground(new java.awt.Color(255, 255, 255));
-        jButton6.setText("Show All");
+        show.setBackground(new java.awt.Color(255, 152, 0));
+        show.setForeground(new java.awt.Color(255, 255, 255));
+        show.setText("Show All");
 
         jMenu1.setText("File");
         jMenuBar1.add(jMenu1);
@@ -223,10 +281,10 @@ public class MainPage extends javax.swing.JFrame {
                                     .addComponent(jLabel5))
                                 .addGap(15, 15, 15)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(jComboBox1, javax.swing.GroupLayout.Alignment.LEADING, 0, 239, Short.MAX_VALUE)
-                                    .addComponent(jTextField2, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField3)
-                                    .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.LEADING)))))
+                                    .addComponent(course, javax.swing.GroupLayout.Alignment.LEADING, 0, 239, Short.MAX_VALUE)
+                                    .addComponent(email, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(marks)
+                                    .addComponent(name, javax.swing.GroupLayout.Alignment.LEADING)))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(77, 77, 77)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -234,15 +292,15 @@ public class MainPage extends javax.swing.JFrame {
                         .addGap(140, 140, 140)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton2)
+                                .addComponent(add)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton3)
+                                .addComponent(update)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton4)
+                                .addComponent(delete)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton5)
+                                .addComponent(serach)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton6))
+                                .addComponent(show))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(74, 74, 74)
@@ -271,19 +329,19 @@ public class MainPage extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField1))
+                    .addComponent(name))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jTextField2))
+                    .addComponent(email))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(course, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel5)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(marks, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -310,11 +368,11 @@ public class MainPage extends javax.swing.JFrame {
                         .addComponent(jButton1)))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3)
-                    .addComponent(jButton4)
-                    .addComponent(jButton5)
-                    .addComponent(jButton6))
+                    .addComponent(add)
+                    .addComponent(update)
+                    .addComponent(delete)
+                    .addComponent(serach)
+                    .addComponent(show))
                 .addGap(0, 34, Short.MAX_VALUE))
         );
 
@@ -347,15 +405,13 @@ public class MainPage extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton add;
+    private javax.swing.JComboBox<String> course;
+    private javax.swing.JButton delete;
+    private javax.swing.JTextField email;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox2;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -378,8 +434,10 @@ public class MainPage extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSlider jSlider1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
+    private javax.swing.JTextField marks;
+    private javax.swing.JTextField name;
+    private javax.swing.JButton serach;
+    private javax.swing.JButton show;
+    private javax.swing.JButton update;
     // End of variables declaration//GEN-END:variables
 }
