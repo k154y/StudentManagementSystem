@@ -61,6 +61,7 @@ public class LoginPage extends javax.swing.JFrame {
 
         password.setText("Password");
 
+        remember_me.setBackground(new java.awt.Color(230, 240, 255));
         remember_me.setText("Remember Me");
 
         successfull.setBackground(new java.awt.Color(255, 51, 0));

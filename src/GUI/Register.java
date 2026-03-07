@@ -8,11 +8,15 @@ public class Register extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Register.class.getName());
 
-   private void loginActionPerformed(java.awt.event.ActionEvent evt) {
-    LoginPage loginPage = new LoginPage(); // create LoginPage JFrame
-    loginPage.setVisible(true);             // show LoginPage
-    this.dispose(); 
-    // close Register page
+ private void loginActionPerformed(java.awt.event.ActionEvent evt) {
+    LoginPage loginPage = new LoginPage();
+    loginPage.setVisible(true);
+    
+    // Hide instead of dispose
+    this.setVisible(false);
+    
+    // Optional: fully dispose after a short delay
+     this.dispose();
 }
    private void createActionPerformed(java.awt.event.ActionEvent evt) {
 
@@ -57,12 +61,13 @@ public class Register extends javax.swing.JFrame {
         e.printStackTrace();
     }
 }
-    public Register() {
-        initComponents();
-        login.addActionListener(this::loginActionPerformed);
-        create.addActionListener(this::createActionPerformed);
-    }
-
+public Register() {
+    initComponents();
+    this.setLocationRelativeTo(null); // center the frame
+    this.setDefaultCloseOperation(DISPOSE_ON_CLOSE); // important: don't exit app
+    login.addActionListener(this::loginActionPerformed);
+    create.addActionListener(this::createActionPerformed);
+}
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
