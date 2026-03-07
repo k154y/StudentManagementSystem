@@ -4,10 +4,7 @@
  */
 package GUI;
 
-/**
- *
- * @author User
- */
+import model.Student;
 public class UpdatePage extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(UpdatePage.class.getName());
@@ -17,7 +14,36 @@ public class UpdatePage extends javax.swing.JFrame {
      */
     public UpdatePage() {
         initComponents();
+        updatebutton.addActionListener(evt -> updateStudent());
+        clear.addActionListener(evt -> clearFields());
     }
+    private void clearFields(){
+    id.setText("");
+    name.setText("");
+    marks.setText("");
+    subject.setSelectedIndex(0);
+}
+    private void updateStudent(){
+
+    try{
+
+        int studentId = Integer.parseInt(id.getText());
+        String studentName = name.getText();
+        String studentCourse = subject.getSelectedItem().toString();
+        double studentMarks = Double.parseDouble(marks.getText());
+
+        // email not in form so empty
+        Student student = new Student(studentId, studentCourse, studentName, "", studentMarks);
+
+        student.update();
+
+        javax.swing.JOptionPane.showMessageDialog(this,"Student Updated Successfully");
+
+    }catch(Exception e){
+        javax.swing.JOptionPane.showMessageDialog(this,"Error: "+e.getMessage());
+    }
+
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -34,12 +60,12 @@ public class UpdatePage extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        id = new javax.swing.JTextField();
+        name = new javax.swing.JTextField();
+        marks = new javax.swing.JTextField();
+        updatebutton = new javax.swing.JButton();
+        clear = new javax.swing.JButton();
+        subject = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -54,15 +80,15 @@ public class UpdatePage extends javax.swing.JFrame {
 
         jLabel5.setText("MARKS:");
 
-        jButton1.setBackground(new java.awt.Color(33, 150, 243));
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("Update");
+        updatebutton.setBackground(new java.awt.Color(33, 150, 243));
+        updatebutton.setForeground(new java.awt.Color(255, 255, 255));
+        updatebutton.setText("Update");
 
-        jButton2.setBackground(new java.awt.Color(96, 125, 139));
-        jButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jButton2.setText("Clear");
+        clear.setBackground(new java.awt.Color(96, 125, 139));
+        clear.setForeground(new java.awt.Color(255, 255, 255));
+        clear.setText("Clear");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Computer Science", "Mathematics", "Java in oop" }));
+        subject.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Computer Science", "Mathematics", "Java in oop" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -88,8 +114,8 @@ public class UpdatePage extends javax.swing.JFrame {
                                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(id, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(name, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel4)
@@ -97,11 +123,11 @@ public class UpdatePage extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jButton1)
+                                        .addComponent(updatebutton)
                                         .addGap(46, 46, 46)
-                                        .addComponent(jButton2))
-                                    .addComponent(jTextField4)
-                                    .addComponent(jComboBox1, 0, 212, Short.MAX_VALUE))))))
+                                        .addComponent(clear))
+                                    .addComponent(marks)
+                                    .addComponent(subject, 0, 212, Short.MAX_VALUE))))))
                 .addContainerGap(81, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -114,23 +140,23 @@ public class UpdatePage extends javax.swing.JFrame {
                 .addGap(21, 21, 21)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(id, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(name, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel4)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(subject, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(23, 23, 23)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(marks, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(31, 31, 31)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(updatebutton)
+                    .addComponent(clear))
                 .addContainerGap(36, Short.MAX_VALUE))
         );
 
@@ -163,17 +189,17 @@ public class UpdatePage extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JButton clear;
+    private javax.swing.JTextField id;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField4;
+    private javax.swing.JTextField marks;
+    private javax.swing.JTextField name;
+    private javax.swing.JComboBox<String> subject;
+    private javax.swing.JButton updatebutton;
     // End of variables declaration//GEN-END:variables
 }

@@ -17,20 +17,9 @@ public class LoginPage extends javax.swing.JFrame {
     public LoginPage() {
         initComponents();
         Register.addActionListener(this::RegisterActionPerformed);
-        int savedUserId = prefs.getInt("user_id", -1);
-        if(savedUserId != -1){
-    // User info exists, auto-login
-        String username = prefs.get("user_name", "");
-        String emailSaved = prefs.get("user_email", "");
-        String passwordSaved = ""; // optionally leave blank, or store hashed password if secure
-        User savedUser = new User(savedUserId, username, emailSaved, passwordSaved);
-
-        MainPage main = new MainPage(savedUser);
-        main.setVisible(true);
-        this.dispose(); // close login page
+      
     }
-
-    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -55,7 +44,7 @@ public class LoginPage extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setBackground(new java.awt.Color(239, 246, 255));
+        jPanel1.setBackground(new java.awt.Color(230, 240, 255));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setText("Login");
@@ -244,11 +233,33 @@ public class LoginPage extends javax.swing.JFrame {
     }//GEN-LAST:event_RegisterActionPerformed
 
   
-    public static void main(String args[]) {
-     
-        java.awt.EventQueue.invokeLater(() -> new LoginPage().setVisible(true));
-    }
+  public static void main(String args[]) {
 
+    java.util.prefs.Preferences prefs =
+        java.util.prefs.Preferences.userRoot().node(LoginPage.class.getName());
+
+    int savedUserId = prefs.getInt("user_id", -1);
+
+    if(savedUserId != -1){
+
+        String username = prefs.get("user_name", "");
+        String emailSaved = prefs.get("user_email", "");
+
+        User savedUser = new User(savedUserId, username, emailSaved, "");
+
+        java.awt.EventQueue.invokeLater(() -> {
+            MainPage main = new MainPage(savedUser);
+            main.setVisible(true);
+        });
+
+    } else {
+
+        java.awt.EventQueue.invokeLater(() -> {
+            new LoginPage().setVisible(true);
+        });
+
+    }
+}
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Login;
     private javax.swing.JButton Register;

@@ -1,21 +1,35 @@
-
 package database;
-import java.sql.*;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 public class DatabaseConnection {
-    private static final String URL="jdbc:mysql://localhost:3306/school"; 
-    private  static final  String USER="root";
-    private static final String PASSWORD="1234";
-    public static Connection getConnection(){
-        
-    try{
-        Connection conn=DriverManager.getConnection(URL,USER,PASSWORD);
-        System.out.print("connected successfully!");
-        return conn;
+    private static Connection conn = null;
+    private static final String URL = "jdbc:sqlite:C:/Users/User/Desktop/school.db";
+
+    public static Connection getConnection() {
+        try {
+            if (conn == null || conn.isClosed()) {
+                conn = DriverManager.getConnection(URL);
+                System.out.println("Connected to SQLite database!");
+                createTables(); // optional: create tables once
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-    catch(SQLException e){
-        System.out.println("Connection failled");
-         e.printStackTrace();
-         return null;
+        return conn;
     }
-}
+
+    private static void createTables() {
+        String sql = "CREATE TABLE IF NOT EXISTS students (...)"; // your table schema
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }

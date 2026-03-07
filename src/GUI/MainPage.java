@@ -7,6 +7,11 @@ import model.User;
 import model.Student;
 import java.sql.ResultSet;
 import javax.swing.JMenu;
+import javax.swing.RowFilter;
+import javax.swing.table.TableRowSorter;
+import javax.swing.table.DefaultTableModel;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainPage extends javax.swing.JFrame {
     
@@ -20,6 +25,38 @@ public class MainPage extends javax.swing.JFrame {
     private JMenu jMenu2;
 public MainPage() {
     initComponents();
+    
+    jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+    public void mouseClicked(java.awt.event.MouseEvent evt) {
+        fillFieldsFromTable();
+    }
+});
+}
+
+private void updateStudentFromFields(){
+    try{
+        Object idObj = jTable1.getClientProperty("selectedId");
+        if(idObj == null){
+            javax.swing.JOptionPane.showMessageDialog(this, "Select a student first!");
+            return;
+        }
+
+        int studentId = (int) idObj;
+        String studentName = name.getText();
+        String studentCourse = course.getSelectedItem().toString();
+        String studentEmail=email.getText();
+        double studentMarks = Double.parseDouble(marks.getText());
+
+        Student student = new Student(studentId, studentCourse, studentName,studentEmail, studentMarks);
+        student.update();
+
+        javax.swing.JOptionPane.showMessageDialog(this, "Student updated successfully!");
+
+        loadStudents(); // refresh JTable
+
+    }catch(Exception e){
+        javax.swing.JOptionPane.showMessageDialog(this,"Error: "+e.getMessage());
+    }
 }
     private void exitActionPerformed(java.awt.event.ActionEvent evt){
         ExitPage exitPage=new ExitPage();
@@ -63,6 +100,7 @@ public MainPage() {
             model.addRow(new Object[]{
                 rs.getInt("id"),
                 rs.getString("name"),
+                rs.getString("email"),
                 rs.getString("course"),
                 rs.getDouble("marks"),
                 " "
@@ -108,6 +146,7 @@ public MainPage() {
             model.addRow(new Object[]{
                 rs.getInt("id"),
                 rs.getString("name"),
+                rs.getString("email"),
                 rs.getString("course"),
                 rs.getDouble("marks")
             });
@@ -120,20 +159,146 @@ public MainPage() {
    public MainPage(User user) {
     initComponents();
     this.loggedUser = user;
+
+    // Add MouseListener for table row click
+    jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseClicked(java.awt.event.MouseEvent evt) {
+            fillFieldsFromTable();
+        }
+    }
+    )
+            ;
+    
+    logout.addActionListener(this::logoutActionPerformed);
     exit.addActionListener(this::exitActionPerformed);
     about.addActionListener(this::aboutActionPerformed);
     add.addActionListener(e -> addStudent());
     show.addActionListener(e -> loadStudents());
     delete.addActionListener(e -> deleteStudent());
     serach.addActionListener(e -> searchStudent());
+    update.addActionListener(e -> updateStudentFromFields());
+    coursefiltercheckbox.addActionListener(e -> applyFilterAndSort());
+    marksfiltercheckbox.addActionListener(e -> applyFilterAndSort());
+    coursefilterdropdown.addActionListener(e -> applyFilterAndSort());
+    sortbynameradio.addActionListener(e -> applyFilterAndSort());
+    sortbymarksradio.addActionListener(e -> applyFilterAndSort());
+    marksslider.addChangeListener(e -> applyFilterAndSort());
+    reset.addActionListener(e -> resetFilters());
+    jPanel1.setBackground(new java.awt.Color(230,240,255));
+    jPanel3.setBackground(new java.awt.Color(230,240,255));
+    jScrollPane1.getViewport().setBackground(new java.awt.Color(230,240,255));
+  
+        // change JFrame background
+    getContentPane().setBackground(new java.awt.Color(230,240,255));
+
+    // make panels transparent so frame color shows
+
+}
+   private void resetFilters(){
+
+    coursefiltercheckbox.setSelected(false);
+    marksfiltercheckbox.setSelected(false);
+    sortbynameradio.setSelected(false);
+    sortbymarksradio.setSelected(false);
+
+    marksslider.setValue(0);
+
+    jTable1.setRowSorter(null);
+
+}
+  private void fillFieldsFromTable() {
+    int selectedRow = jTable1.getSelectedRow();
+    if(selectedRow != -1){
+        int studentId = (int) jTable1.getValueAt(selectedRow, 0);
+        String studentName = (String) jTable1.getValueAt(selectedRow, 1);
+        String studentEmail = (String) jTable1.getValueAt(selectedRow, 2);
+        String studentCourse = (String) jTable1.getValueAt(selectedRow, 3);
+        double studentMarks = (double) jTable1.getValueAt(selectedRow, 4);
+
+        // Fill input fields
+        name.setText(studentName);
+        email.setText(studentEmail);
+        course.setSelectedItem(studentCourse);
+        marks.setText(String.valueOf(studentMarks));
+
+        // Store ID
+        jTable1.putClientProperty("selectedId", studentId);
+    }
+}
+   
+
+
+    @SuppressWarnings("unchecked")
+    private void logoutActionPerformed(java.awt.event.ActionEvent evt){
+         java.util.prefs.Preferences prefs =
+        java.util.prefs.Preferences.userRoot().node(LoginPage.class.getName());
+
+    prefs.remove("user_id");
+    prefs.remove("user_email");
+    prefs.remove("user_name");
+
+         LoginPage login = new LoginPage(); // open login page
+         login.setVisible(true);
+    
+    this.dispose(); // close current MainPage
+    }
+    private void applyFilterAndSort(){
+
+    DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+    TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
+    jTable1.setRowSorter(sorter);
+
+    List<RowFilter<Object,Object>> filters = new ArrayList<>();
+
+    // FILTER BY COURSE
+    if(coursefiltercheckbox.isSelected()){
+
+    String selectedCourse = coursefilterdropdown.getSelectedItem().toString();
+
+    filters.add(new RowFilter<Object,Object>() {
+        public boolean include(RowFilter.Entry<?,?> entry) {
+
+            String course = entry.getValue(3).toString();
+
+            return course.equals(selectedCourse); // exact match only
+        }
+    });
+
 }
 
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
-    @SuppressWarnings("unchecked")
+    // FILTER BY MARKS
+    if(marksfiltercheckbox.isSelected()){
+        int minMarks = marksslider.getValue();
+
+        filters.add(new RowFilter<Object,Object>() {
+            public boolean include(RowFilter.Entry<?,?> entry) {
+                double marks = Double.parseDouble(entry.getValue(4).toString());
+                return marks >= minMarks;
+            }
+        });
+    }
+
+    if(!filters.isEmpty()){
+        sorter.setRowFilter(RowFilter.andFilter(filters));
+    }
+
+    // SORTING
+    if(sortbynameradio.isSelected()){
+        sorter.setSortKeys(
+            java.util.Arrays.asList(
+                new javax.swing.RowSorter.SortKey(1, javax.swing.SortOrder.ASCENDING)
+            )
+        );
+    }
+
+    if(sortbymarksradio.isSelected()){
+        sorter.setSortKeys(
+            java.util.Arrays.asList(
+                new javax.swing.RowSorter.SortKey(4, javax.swing.SortOrder.DESCENDING)
+            )
+        );
+    }
+}
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -149,13 +314,13 @@ public MainPage() {
         marks = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jCheckBox1 = new javax.swing.JCheckBox();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        jCheckBox2 = new javax.swing.JCheckBox();
-        jSlider1 = new javax.swing.JSlider();
-        jLabel8 = new javax.swing.JLabel();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jButton1 = new javax.swing.JButton();
+        coursefiltercheckbox = new javax.swing.JCheckBox();
+        coursefilterdropdown = new javax.swing.JComboBox<>();
+        marksfiltercheckbox = new javax.swing.JCheckBox();
+        marksslider = new javax.swing.JSlider();
+        sort = new javax.swing.JLabel();
+        sortbynameradio = new javax.swing.JRadioButton();
+        reset = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         add = new javax.swing.JButton();
         update = new javax.swing.JButton();
@@ -164,29 +329,21 @@ public MainPage() {
         jLabel9 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jRadioButton2 = new javax.swing.JRadioButton();
+        sortbymarksradio = new javax.swing.JRadioButton();
         keyword = new javax.swing.JTextField();
         serach = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-
-        jMenuItem3 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
         exit = new javax.swing.JMenuItem();
+        logout = new javax.swing.JMenuItem();
         studentmenu = new javax.swing.JMenu();
-
-
-        jMenuItem2 = new javax.swing.JMenuItem();
-      
-    
-
         jMenu3 = new javax.swing.JMenu();
         about = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("STUDENT MANAGEMENT SYSTEM");
         setAutoRequestFocus(false);
-        setBackground(new java.awt.Color(239, 246, 255));
+        setBackground(new java.awt.Color(153, 153, 0));
 
         jLabel1.setForeground(new java.awt.Color(0, 102, 255));
         jLabel1.setText("STUDENT INFORMATION");
@@ -213,38 +370,52 @@ public MainPage() {
 
         jLabel4.setText("Courses:");
 
-        course.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Computer Science", "Mathematics", "OOP in Java" }));
+        course.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Computer Science", "Mathematics", "OOP in Java", "C++", "Computer Graphics" }));
 
         jLabel5.setText("Marks:");
 
+        jTable1.setBackground(new java.awt.Color(230, 240, 255));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "ID", "NAMES", "SUBJECTS", "MARKS"
+                "ID", "NAMES", "EMAIL", "SUBJECTS", "MARKS"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
-        jCheckBox1.setSelected(true);
-        jCheckBox1.setText("Filter By Course");
+        coursefiltercheckbox.setBackground(new java.awt.Color(230, 240, 255));
+        coursefiltercheckbox.setSelected(true);
+        coursefiltercheckbox.setText("Filter By Course");
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "computer science" }));
+        coursefilterdropdown.setBackground(new java.awt.Color(230, 240, 255));
+        coursefilterdropdown.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Computer Science", "Mathematics", "OOP in Java ", "C++", "Computer Graphics" }));
 
-        jCheckBox2.setText("Filter By Marks");
+        marksfiltercheckbox.setBackground(new java.awt.Color(230, 240, 255));
+        marksfiltercheckbox.setText("Filter By Marks");
 
-        jSlider1.setValue(30);
+        marksslider.setBackground(new java.awt.Color(230, 240, 255));
+        marksslider.setValue(30);
 
-        jLabel8.setText("Sort By:");
+        sort.setText("Sort By:");
 
-        jRadioButton1.setText("Name(A-Z)");
+        sortbynameradio.setBackground(new java.awt.Color(230, 240, 255));
+        sortbynameradio.setText("Name(A-Z)");
 
-        jButton1.setBackground(new java.awt.Color(51, 102, 255));
-        jButton1.setText("Reset");
+        reset.setBackground(new java.awt.Color(51, 102, 255));
+        reset.setText("Reset");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -281,7 +452,8 @@ public MainPage() {
         jLabel6.setForeground(new java.awt.Color(0, 102, 255));
         jLabel6.setText("STUDENT RECORDS");
 
-        jRadioButton2.setText("Marks(HIGH-LOW)");
+        sortbymarksradio.setBackground(new java.awt.Color(230, 240, 255));
+        sortbymarksradio.setText("Marks(HIGH-LOW)");
 
         keyword.setText("Type here to search");
         keyword.addActionListener(this::keywordActionPerformed);
@@ -290,13 +462,17 @@ public MainPage() {
         serach.setForeground(new java.awt.Color(255, 255, 255));
         serach.setText("Search");
 
+        jMenuBar1.setBackground(new java.awt.Color(230, 240, 255));
+
         jMenu1.setText("File");
 
+        exit.setBackground(new java.awt.Color(230, 240, 255));
         exit.setText("Exit");
         jMenu1.add(exit);
 
-        jMenuItem3.setText("Logout");
-        jMenu1.add(jMenuItem3);
+        logout.setBackground(new java.awt.Color(230, 240, 255));
+        logout.setText("Logout");
+        jMenu1.add(logout);
 
         jMenuBar1.add(jMenu1);
 
@@ -305,6 +481,7 @@ public MainPage() {
 
         jMenu3.setText("Help");
 
+        about.setBackground(new java.awt.Color(230, 240, 255));
         about.setText("About");
         jMenu3.add(about);
 
@@ -344,23 +521,23 @@ public MainPage() {
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(163, 163, 163)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jCheckBox1)
-                                            .addComponent(jCheckBox2)
-                                            .addComponent(jRadioButton1)
-                                            .addComponent(jRadioButton2)
+                                            .addComponent(coursefiltercheckbox)
+                                            .addComponent(marksfiltercheckbox)
+                                            .addComponent(sortbynameradio)
+                                            .addComponent(sortbymarksradio)
                                             .addGroup(layout.createSequentialGroup()
                                                 .addGap(21, 21, 21)
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(jLabel8)))))
+                                                    .addComponent(marksslider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(sort)))))
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(186, 186, 186)
-                                        .addComponent(jButton1))
+                                        .addComponent(reset))
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                             .addComponent(jLabel7)
-                                            .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(coursefilterdropdown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addGap(71, 71, 71))))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(keyword, javax.swing.GroupLayout.PREFERRED_SIZE, 639, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -431,28 +608,28 @@ public MainPage() {
                             .addComponent(keyword, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(serach, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jCheckBox1)
+                        .addComponent(coursefiltercheckbox)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(coursefilterdropdown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jCheckBox2)
+                        .addComponent(marksfiltercheckbox)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(marksslider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel8)
+                        .addComponent(sort)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jRadioButton1)
+                                .addComponent(sortbynameradio)
                                 .addGap(42, 42, 42))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jRadioButton2)
+                                .addComponent(sortbymarksradio)
                                 .addGap(18, 18, 18)))))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(update)
                     .addComponent(delete)
                     .addComponent(show)
-                    .addComponent(jButton1))
+                    .addComponent(reset))
                 .addGap(75, 75, 75))
         );
 
@@ -496,13 +673,11 @@ public MainPage() {
     private javax.swing.JMenuItem about;
     private javax.swing.JButton add;
     private javax.swing.JComboBox<String> course;
+    private javax.swing.JCheckBox coursefiltercheckbox;
+    private javax.swing.JComboBox<String> coursefilterdropdown;
     private javax.swing.JButton delete;
     private javax.swing.JTextField email;
     private javax.swing.JMenuItem exit;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBox jCheckBox2;
-    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -510,32 +685,26 @@ public MainPage() {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
-
-
-  
-    private javax.swing.JMenuItem jMenuItem3;
-
-
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSlider jSlider1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField keyword;
+    private javax.swing.JMenuItem logout;
     private javax.swing.JTextField marks;
+    private javax.swing.JCheckBox marksfiltercheckbox;
+    private javax.swing.JSlider marksslider;
     private javax.swing.JTextField name;
+    private javax.swing.JButton reset;
     private javax.swing.JButton serach;
     private javax.swing.JButton show;
+    private javax.swing.JLabel sort;
+    private javax.swing.JRadioButton sortbymarksradio;
+    private javax.swing.JRadioButton sortbynameradio;
     private javax.swing.JMenu studentmenu;
     private javax.swing.JButton update;
     // End of variables declaration//GEN-END:variables

@@ -18,7 +18,7 @@ public class AboutPage extends javax.swing.JFrame {
     public AboutPage() {
         initComponents();
         ok.addActionListener(this::okActionPerformed);
-        
+        getContentPane().setBackground(new java.awt.Color(230,240,255));
     }
     private void okActionPerformed(java.awt.event.ActionEvent evt) {
   // open MainPage

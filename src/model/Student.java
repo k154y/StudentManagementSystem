@@ -82,6 +82,8 @@ public class Student extends Person implements DatabaseOperations  {
         ps.setString(3, course);
         ps.setDouble(4, marks);
         ps.setInt(5, id);
+        ps.executeUpdate();
+        
 
 
     } catch (SQLException e) {

@@ -19,6 +19,7 @@ public class ExitPage extends javax.swing.JFrame {
         initComponents();
         yes.addActionListener(this::yesActionPerformed);
         no.addActionListener(this::noActionPerformed);
+        getContentPane().setBackground(new java.awt.Color(230,240,255));
     }
 
     /**
@@ -53,6 +54,7 @@ public class ExitPage extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(0, 255, 255));
 
         jLabel1.setText("EXIT CONFIRMATION");
 
