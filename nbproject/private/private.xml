@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/C:/Users/User/Desktop/StudentManagementSystem/src/studentmanagementsystem/StudentManagementSystem.java</file>
+            <file>file:/C:/Users/User/Desktop/StudentManagementSystem/src/GUI/LoginPage.java</file>
+            <file>file:/C:/Users/User/Desktop/StudentManagementSystem/src/model/Person.java</file>
+            <file>file:/C:/Users/User/Desktop/StudentManagementSystem/src/model/Student.java</file>
+            <file>file:/C:/Users/User/Desktop/StudentManagementSystem/src/model/User.java</file>
+            <file>file:/C:/Users/User/Desktop/StudentManagementSystem/src/GUI/Register.java</file>
+            <file>file:/C:/Users/User/Desktop/StudentManagementSystem/src/GUI/AboutPage.java</file>
+            <file>file:/C:/Users/User/Desktop/StudentManagementSystem/src/GUI/ExitPage.java</file>
+            <file>file:/C:/Users/User/Desktop/StudentManagementSystem/src/database/DatabaseConnection.java</file>
+            <file>file:/C:/Users/User/Desktop/StudentManagementSystem/src/GUI/MainPage.java</file>
+            <file>file:/C:/Users/User/Desktop/StudentManagementSystem/src/GUI/UpdatePage.java</file>
+            <file>file:/C:/Users/User/Desktop/StudentManagementSystem/src/database/DatabaseOperations.java</file>
+            <file>file:/C:/Users/User/Desktop/StudentManagementSystem/src/database/InitDatabase.java</file>
+        </group>
+    </open-files>
+</project-private>
