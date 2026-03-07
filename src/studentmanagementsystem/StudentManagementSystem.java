@@ -1,32 +1,45 @@
 package studentmanagementsystem;
 
 import database.DatabaseConnection;
-import GUI.LoginPage;  // Make sure your login page class is imported
-import java.sql.Connection;
+import GUI.LoginPage;
+import GUI.MainPage;
+import model.User;
 
+import java.sql.Connection;
+import java.util.prefs.Preferences;
 import javax.swing.SwingUtilities;
 
 public class StudentManagementSystem {
 
     public static void main(String[] args) {
-        // Step 1: Connect to the database
+        // 1. Connect to the database
         Connection conn = DatabaseConnection.getConnection();
 
         if (conn != null) {
             System.out.println("Database is working!");
 
-            // Step 2: Launch GUI safely on Event Dispatch Thread
-            SwingUtilities.invokeLater(() -> {
-                new LoginPage().setVisible(true);
-            });
+            // 2. Check saved preferences for Remember Me
+            Preferences prefs = Preferences.userRoot().node(LoginPage.class.getName());
+            int savedUserId = prefs.getInt("user_id", -1);
+
+            if (savedUserId != -1) {
+                // Auto-login saved user
+                String username = prefs.get("user_name", "");
+                String emailSaved = prefs.get("user_email", "");
+                User savedUser = new User(savedUserId, username, emailSaved, "");
+
+                // Open MainPage directly
+                SwingUtilities.invokeLater(() -> {
+                    MainPage main = new MainPage(savedUser);
+                    main.setVisible(true);
+                });
+            } else {
+                // No saved user → show login page
+                SwingUtilities.invokeLater(() -> new LoginPage().setVisible(true));
+            }
 
         } else {
             System.out.println("Database connection error!");
         }
-
-        // Optional: Add a shutdown hook to close connection on exit
-//        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-//            DatabaseConnection.closeConnection();
-//        }));
     }
 }
